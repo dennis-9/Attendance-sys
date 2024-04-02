@@ -1,0 +1,41 @@
+{% extends 'attendance_webapp/base.html'%}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <body>
+
+        <div class="container bg-light shadow-md p-5 form-layout">
+
+            <h3>Update Record.</h3>
+
+            <h6> Update this Record. </h6>
+
+            <hr>
+
+            <br>
+
+            <form method="POST" autocomplete="off">
+                {% csrf_token %}
+
+                {{form|crispy}}
+                
+
+                <br>
+                <!-- Submit Button -->
+                <button type="submit" class="btn btn-info">
+                     Update Record &nbsp; 
+                    <i class="fa-solid fa-check"></i> </a>
+                </button>
+
+                &nbsp;
+
+                <a href="{% url 'dashboard' %}" class="btn btn-secondary">
+                    Go Back &nbsp; <i class="fa-solid fa-arrow-left"></i>
+                </a>
+            </form>
+        </div>
+
+        <br>
+
+    </body>
+{% endblock %}

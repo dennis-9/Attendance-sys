@@ -1,0 +1,51 @@
+{% extends 'attendance_webapp/base.html'%}
+
+
+{% block content %}
+    <div class="card">
+
+      
+
+        <div class="card-body">
+            <i class="fa-solid fa-user-large"></i> &nbsp;
+
+            <strong>
+
+
+                {{record.last_name|upper}}
+                {{record.first_name}}
+    
+    
+            </strong>
+    
+            <hr>
+
+            <p> <strong>ID: </strong> {{record.id}} </p>
+            <p> <strong>Position: </strong> {{record.position}} </p>
+
+            <p> <strong>Email: </strong> {{record.email}} </p>
+            <p> <strong>Phone Number: </strong> {{record.phone}} </p>
+            <p> <strong>Address: </strong> {{record.address}} </p>
+            <p> <strong>City: </strong> {{record.city}} </p>
+            <p> <strong>Country: </strong> {{record.country}} </p>
+            <p> <strong>Date Created: </strong> {{record.creation_date}} </p>
+
+        </div>
+    </div>
+
+        <br>
+
+        <a href ="{% url 'dashboard' %}" class="btn btn-secondary">Return &nbsp; <i class="fa-solid fa-arrow-left"></i> </a>
+
+        &nbsp;
+
+        <a href ="{% url 'update-record' record.id%}" class="btn btn-info">Update Record &nbsp; <i class="fa-solid fa-check"></i> </a>
+
+        &nbsp;
+
+        <a href ="{% url 'delete-record' record.id%}" class="btn btn-danger">Delete &nbsp; <i class="fa-solid fa-minus"></i> </a>
+
+        &nbsp;
+
+
+{% endblock %}
