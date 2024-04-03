@@ -28,12 +28,9 @@ environ.Env.read_env()
 
 
 # SECURITY WARNING: keep the secret key used in production secret!
-import os
-from dotenv import load_dotenv
 
-load_dotenv()
 
-SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = 'django-insecure-_)6zkk3!946((wc*+u(8wi$=9835njkj3kw=xf18bvd7c7@odf'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
