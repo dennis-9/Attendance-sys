@@ -29,6 +29,17 @@
                     <i class="fa-solid fa-key"></i> </button>
             </form>
 
+            {% if form2.errors %}
+              <div class="alert alert-danger">
+                <p>Please correct the following errors:</p>
+                <ul>
+                  {% for error in form2.errors.values %}
+                    <li>{{ error }}</li>
+                  {% endfor %}
+                </ul>
+              </div>
+            {% endif %}
+            
             <br>
 
             <div class="text-center">

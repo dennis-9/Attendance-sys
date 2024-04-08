@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from . forms import CreateUserForm, LoginForm, AddRecordForm, UpdateRecordForm
 
-from django.contrib.auth.models import auth
-from django.contrib.auth import authenticate
+from django.contrib.auth.models import auth, User
+from django.contrib.auth import authenticate,login
 
 from django.contrib.auth.decorators import login_required
 
@@ -32,33 +32,38 @@ def register(request):
     context = {"form": form}
     
     return render(request, 'attendance_webapp/register.html', context=context)
-      
-#Login User
+  
+  
+    
+# Login User
 def my_login(request):
-    
     form = LoginForm()
-    
-    if request.method == "POST":
-        form = LoginForm(request, data=request.POST)
-        
-        if form.is_valid():
-            username = request.POST.get('username')
-            password = request.POST.get('password')
-            
-            user = authenticate(request, username=username, password=password)
-            
-            #check if the user exists
-            if user is not None:
-                auth.login(request, user)
-                
-                messages.success(request, "You have logged In")
 
-                return redirect('dashboard')
-            else:
-                form.add_error(None, "Invalid username and/or password")
-    
+    if request.method == "POST":
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        # Check if the user exists
+        user = authenticate(request, username=username, password=password)
+        if user is None:
+            messages.error(request, "User not found. Please register first.")
+            return render(request, 'attendance_webapp/my-login.html', context={'form2': form})
+
+        # Authenticate the user
+        if not user.check_password(password):
+            messages.error(request, "Invalid password")
+            return render(request, 'attendance_webapp/my-login.html', context={'form2': form})
+
+        # If user exists and password is correct, log in the user
+        login(request, user)
+        messages.success(request, "You have logged in successfully.")
+        return redirect('dashboard')
+
     context = {"form2": form}
-    return render(request,'attendance_webapp/my-login.html', context=context) 
+    return render(request, 'attendance_webapp/my-login.html', context=context)
+
+
+
 #Logout            
 def user_logout(request):
     auth.logout(request)
@@ -92,6 +97,11 @@ def add_record(request):
         if form.is_valid():
             
             form.save()
+            #Aunthenticate and login
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(username=username, password=password)
+            login(request,user)
             
             messages.success(request, "Your Record was Created!")
 
@@ -128,12 +138,15 @@ def update_record(request, pk):
 #  Read / View a record
 @login_required(login_url='my-login')
 def one_record(request, pk):
-    
-    all_records = Record.objects.get(id=pk)
-    
-    context={'record': all_records}
-    
-    return render(request, 'attendance_webapp/view-record.html', context=context)
+    if request.user.is_authenticated:
+    #Lookup to records
+        all_records = Record.objects.get(id=pk)
+        
+        context={'record': all_records}
+        
+        return render(request, 'attendance_webapp/view-record.html', context=context)
+    else:
+        messages.success(request, "You must to be Logged in")
 
 
 #Delete Record
